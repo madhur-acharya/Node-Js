@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset= "UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>send data to server</title>
+<style>
+	#submit{width: 200px; border: none; background-color: seagreen; padding: 10px; margin-left: 50px;}
+	input{padding: 10px; margin-bottom: 5px;}
+	lable{display: inline-block; width: 100px;}
+</style>
+</head>
+<body>
+	<form action= "/contacts/add" method= "POST">
+		<p> create a new row in database</p>
+		<lable for= "Fname">First name</lable><input id= "Fname" type= "text" name= "Fname"><br>
+		<lable for= "Lname">Last name</lable><input id= "Lname" type= "text" name= "Lname"><br>
+		<lable for= "Age">Age</lable><input id= "age" type= "number" name= "Age"><br>
+		<input type= "submit" id= "submit">
+		<input type= "reset" id= "reset">
+	</form>
+
+	<form action= "/contacts/select" method= "GET">
+		<p>select data from database</p>
+		<lable for= "d_type">type</lable><input type= "text" name= "d_type"><br>
+		<lable for= "info">value</lable><input type= "text" name= "info"><br>
+		<input type= "submit" id= "submit">
+		<input type= "reset" id= "reset">
+	</form>
+	<br>
+	<br>
+
+	<form action= "/contacts/remove" method= "GET">
+		<p>delete row from database</p>
+		<lable for= "del_type">type</lable><input type= "text" name= "del_type"><br>
+		<lable for= "del_info">value</lable><input type= "text" name= "del_info"><br>
+		<input type= "submit" id= "submit">
+		<input type= "reset" id= "reset">
+	</form>
+	<br>
+	<br>
+
+	<button id= "select_all" >retreve all data</button>
+
+<script>
+		
+		document.getElementById("select_all").onclick= function()
+		{
+			var http= new XMLHttpRequest();
+			http.onreadystatechange= function()
+			{
+				if(http.readyState === 4 && http.status === 200)
+				{
+					console.log(http.response);
+					document.write(http.responseText);
+				}
+			};
+			http.open('GET', '/contacts/all');
+			http.send();
+		};
+	
+</script>
+</body>
+</html>
