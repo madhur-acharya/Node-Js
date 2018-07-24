@@ -77,5 +77,25 @@ router.get('/all', function(request, response)
 			response.send("<p>culd not parse data!</p>");
 	});
 });
+//------------------------------------------------------------------------------------------------------------------------------
+//parsing and writing to a JSON file
+router.get('/', function(request, response)
+ {
+ 	console.log("parsing from games.JSON");
+ 	console.log(games);
+ 	response.send(games);
+ });
 
+router.get('/:genre/:game', function(request, response)
+{
+	games[request.params.genre]= request.params.game;
+	fileSystem.writeFile('./database/games.JSON', JSON.stringify(games, null, 2), function(err)
+	{
+		if(err)
+			console.log(err);
+	});
+	console.log("writing to games.JSON");
+	 console.log(games);
+	 response.send("data added!");
+});
 //------------------------------------------------------------------------------------------------------------------------------
