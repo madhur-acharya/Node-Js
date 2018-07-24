@@ -1,0 +1,40 @@
+<P>{{note}}</p>
+ 
+<textarea id= "new_note" placeholder= "write a new note"></textarea>
+<br>
+<button id= "update_text">add new note</button>
+<button id= "clear">delete note</button>
+
+<script>
+	document.getElementById("update_text").onclick= function()
+	{
+		console.log(document.getElementById("new_note").value);
+		let http = new XMLHttpRequest();
+		http.open("POST", "#", true);
+		http.setRequestHeader("Content-type", "text/plain");
+		http.onreadystatechange = function() 
+		{ 
+			if(http.readyState == 4 && http.status == 200) 
+			{
+			    console.log(http.responseText);
+			    //location.reload();
+			}
+		};
+		http.send(document.getElementById("new_note").value);
+	}
+
+	document.getElementById("clear").onclick= function()
+	{
+		let http= new XMLHttpRequest();
+		http.open("GET", "/note/delete", true);
+		http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		http.onreadystatechange= function()
+		{
+			if(http.redayState == 4 && http.status == 200)
+			{
+				console.log(http.responseText);
+			}
+		};
+		http.send("test=works");
+	}
+</script>
