@@ -2,57 +2,57 @@
  var router= express.Router();
  const fileSystem= require('fs');
  const bodyParser= require('body-parser');
+ const path= require('path');
 
  var urlencodedParser = bodyParser.urlencoded({ extended: false });
+ var JSON_parser= bodyParser.json();
+ var text_parser= bodyParser.text();
 
  router.get('/', function(request, response)
  {
  	var RAW_data= "";
- 	fileSystem.readFile('./database/text.txt', function(err, data)
+ 	fileSystem.readFile(path.join(process.cwd(), '/database/text.txt'), function(err, data)
 	{
-		if(err)
-			console.log(err);
+		if(err != null || err != undefined)
+			console.log("error: ", err);
 		else
 		{
 			RAW_data= data.toString()
-			console.log("parsing from text.txt");
- 			console.log(RAW_data);
- 			response.send(RAW_data);
+ 			response.render('note', {note: RAW_data});
 		}
 	});
  });
 
-router.post('/', urlencodedParser, function(request, response)
+router.get('/delete', function(request, response)
 {
-	console.log(request.body);
-	/*fileSystem.writeFile('./database/text.txt', games + request.body, function(err)
+	fileSystem.writeFile(path.join(process.cwd(), '/database/text.txt'), '', function(err)
 	{
-		if(err)
-			console.log(err);
+		if(err != null || err != undefined)
+			console.log("error: ", err);
+		else
+			response.send("note deleted");
 	});
-	console.log("writing to games.JSON");
-	 console.log(games);*/
-	 response.send("data added!");
 });
 
-/* router.get('/', function(request, response)
- {
- 	console.log("parsing from games.JSON");
- 	console.log(games);
- 	response.send(games);
- });
-
-router.get('/:genre/:game', function(request, response)
+router.post('/', text_parser, function(request, response)
 {
-	games[request.params.genre]= request.params.game;
-	fileSystem.writeFile('./database/games.JSON', JSON.stringify(games, null, 2), function(err)
+	var RAW_data= "";
+ 	fileSystem.readFile(path.join(process.cwd(), '/database/text.txt'), function(err, data)
 	{
-		if(err)
-			console.log(err);
+		if(err != null || err != undefined)
+			console.log("error: ", err);
+		else
+		{
+			RAW_data= data.toString()
+ 			fileSystem.writeFile(path.join(process.cwd(), '/database/text.txt'), RAW_data + request.body, function(err)
+			{
+				if(err != null || err != undefined)
+					console.log("error: ", err);
+				else
+					response.send("data added!");
+			});
+		}
 	});
-	console.log("writing to games.JSON");
-	 console.log(games);
-	 response.send("data added!");
-});*/
+});
 
  module.exports= router;
